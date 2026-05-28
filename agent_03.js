@@ -13,8 +13,7 @@ async function generate_title(text) {
     input: [
       {
         role: "system",
-        content:
-          "Eres un asistente que ayuda a los usuarios a generar un titulo para una noticia. Siempre responde en español.",
+        content: `Eres un asistente que ayuda a los usuarios a generar un titulo para una noticia. Siempre responde en español.\n\nSolo responde el titulo, no otro texto.`,
       },
       {
         role: "user",
@@ -32,10 +31,31 @@ const EvaluationSchema = z.object({
 });
 
 const skill = `
-  - El titulo debe ser un resumen claro y conciso de la noticia.
-  - El titulo debe ser corto y directo.
-  - El titulo debe ser emocional.
-  - El titulo debe ller un titulo que sea atractivo y interesante para el lector.
+Sigue estos pasos en orden para evaluar el titulo. Si falla un paso, anota el problema en "problems" y no apruebes hasta que todos pasen.
+
+Paso 1 — Fidelidad al texto
+- Lee el texto de la noticia y comprueba que el titulo refleje el hecho principal, sin inventar datos ni omitir el eje central.
+- Rechaza si el titulo es engañoso, ambiguo respecto al contenido o no responde a "¿de qué trata esta noticia?".
+
+Paso 2 — Claridad y concisión
+- Comprueba que el titulo sea un resumen comprensible en una sola lectura, sin rodeos ni frases confusas.
+- Rechaza si hay palabras innecesarias, jerga oscura o más de una idea competidora.
+
+Paso 3 — Brevedad y formato
+- Cuenta palabras: idealmente entre 6 y 12; máximo 15 salvo nombre propio imprescindible.
+- Rechaza si es demasiado largo, tiene más de una oración o termina en punto innecesario.
+
+Paso 4 — Impacto emocional
+- Valora si transmite urgencia, relevancia o interés humano sin caer en sensacionalismo falso.
+- Rechaza si es plano y genérico, o si exagera más allá de lo que permite el texto.
+
+Paso 5 — Atractivo para el lector
+- Pregúntate si un lector haría clic o seguiría leyendo: ¿hay gancho, verbo fuerte o dato concreto?
+- Rechaza si suena a titular de relleno, repetitivo o intercambiable con cualquier otra noticia.
+
+Criterio final
+- approved: true solo si los cinco pasos se cumplen.
+- problems: lista breve en español, una entrada por cada paso fallido (ej. "Paso 3: excede 15 palabras").
 `;
 
 async function evaluate_title(text, title) {
@@ -44,7 +64,7 @@ async function evaluate_title(text, title) {
     input: [
       {
         role: "system",
-        content: `Eres un editor periodístico que ayuda a los usuarios a evaluar un titulo para una noticia. Eres muy semi-estricto con el contenido y el formato. Siempre responde en español.\n\n${skill}`,
+        content: `Eres un editor periodístico que ayuda a los usuarios a evaluar un titulo para una noticia. Eres muy estricto con el contenido y el formato. Siempre responde en español.\n\n${skill}`,
       },
       {
         role: "user",
