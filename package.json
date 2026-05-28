@@ -1,0 +1,26 @@
+{
+  "name": "agentes-ia",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Raggok/agentes-ia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Raggok/agentes-ia/issues"
+  },
+  "homepage": "https://github.com/Raggok/agentes-ia#readme",
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "dotenv": "^17.4.2",
+    "openai": "^6.39.0",
+    "zod": "^4.4.3"
+  }
+}
